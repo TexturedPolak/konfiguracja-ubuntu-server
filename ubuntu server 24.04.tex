@@ -1,0 +1,1634 @@
+%%
+% Copyright (c) 2017 - 2025, Pascal Wagler;
+% Copyright (c) 2014 - 2025, John MacFarlane
+%
+% All rights reserved.
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions
+% are met:
+%
+% - Redistributions of source code must retain the above copyright
+% notice, this list of conditions and the following disclaimer.
+%
+% - Redistributions in binary form must reproduce the above copyright
+% notice, this list of conditions and the following disclaimer in the
+% documentation and/or other materials provided with the distribution.
+%
+% - Neither the name of John MacFarlane nor the names of other
+% contributors may be used to endorse or promote products derived
+% from this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+% "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+% LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+% FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+% COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+% INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+% BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+% LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+% CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+% LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+% ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+% POSSIBILITY OF SUCH DAMAGE.
+%%
+
+%%
+% This is the Eisvogel pandoc LaTeX template.
+%
+% For usage information and examples visit the official GitHub page:
+% https://github.com/Wandmalfarbe/pandoc-latex-template
+%%
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names,table}{xcolor}
+\documentclass[
+  polish,
+  paper=a4,
+  ,captions=tableheading
+]{scrartcl}
+\usepackage{xcolor}
+\usepackage[margin=2.5cm,includehead=true,includefoot=true,centering,]{geometry}
+\usepackage{amsmath,amssymb}
+
+
+% add backlinks to footnote references, cf. https://tex.stackexchange.com/questions/302266/make-footnote-clickable-both-ways
+\usepackage{footnotebackref}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+
+% Use setspace anyway because we change the default line spacing.
+% The spacing is changed early to affect the titlepage and the TOC.
+\usepackage{setspace}
+\setstretch{1.2}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{listings}
+\newcommand{\passthrough}[1]{#1}
+\lstset{defaultdialect=[5.3]Lua}
+\lstset{defaultdialect=[x86masm]Assembler}
+\usepackage{etoolbox}
+\BeforeBeginEnvironment{lstlisting}{\par\noindent\begin{minipage}{\linewidth}}
+\AfterEndEnvironment{lstlisting}{\end{minipage}\par\addvspace{\topskip}}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+
+% Workaround/bugfix from jannick0.
+% See https://github.com/jgm/pandoc/issues/4302#issuecomment-360669013)
+% or https://github.com/Wandmalfarbe/pandoc-latex-template/issues/2
+%
+% Redefine the verbatim environment 'Highlighting' to break long lines (with
+% the help of fvextra). Redefinition is necessary because it is unlikely that
+% pandoc includes fvextra in the default template.
+\usepackage{fvextra}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,fontsize=\small,commandchars=\\\{\}}
+
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+% Make use of float-package and set default placement for figures to H.
+% The option H means 'PUT IT HERE' (as  opposed to the standard h option which means 'You may put it here if you like').
+\usepackage{float}
+\floatplacement{figure}{H}
+\makeatother
+\ifLuaTeX
+\usepackage[bidi=basic,shorthands=off,]{babel}
+\else
+\usepackage[bidi=default,shorthands=off,]{babel}
+\fi
+\ifLuaTeX
+  \usepackage{selnolig} % disable illegal ligatures
+\fi
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\definecolor{default-linkcolor}{HTML}{A50000}
+\definecolor{default-filecolor}{HTML}{A50000}
+\definecolor{default-citecolor}{HTML}{4077C0}
+\definecolor{default-urlcolor}{HTML}{4077C0}
+
+\hypersetup{
+  pdftitle={Konfiguracja Ubuntu Server 24.04},
+  pdfauthor={Rafał Kiepiela},
+  pdflang={pl},
+  hidelinks,
+  breaklinks=true,
+  pdfcreator={LaTeX via pandoc with the Eisvogel template}}
+
+\title{Konfiguracja Ubuntu Server 24.04}
+\author{Rafał Kiepiela}
+\date{}
+
+
+%
+% for the background color of the title page
+%
+\usepackage{pagecolor}
+\usepackage{afterpage}
+\usepackage{tikz}
+\usepackage[margin=2.5cm,includehead=true,includefoot=true,centering]{geometry}
+
+%
+% break urls
+%
+\PassOptionsToPackage{hyphens}{url}
+
+%
+% When using babel or polyglossia with biblatex, loading csquotes is recommended
+% to ensure that quoted texts are typeset according to the rules of your main language.
+%
+\usepackage{csquotes}
+
+%
+% captions
+%
+\definecolor{caption-color}{HTML}{777777}
+\usepackage[font={stretch=1.2}, textfont={color=caption-color}, position=top, skip=4mm, labelfont=bf, singlelinecheck=false, justification=raggedright]{caption}
+\setcapindent{0em}
+
+%
+% blockquote
+%
+\definecolor{blockquote-border}{RGB}{221,221,221}
+\definecolor{blockquote-text}{RGB}{119,119,119}
+\usepackage{mdframed}
+\newmdenv[rightline=false,bottomline=false,topline=false,linewidth=3pt,linecolor=blockquote-border,skipabove=\parskip]{customblockquote}
+\renewenvironment{quote}{\begin{customblockquote}\list{}{\rightmargin=0em\leftmargin=0em}%
+\item\relax\color{blockquote-text}\ignorespaces}{\unskip\unskip\endlist\end{customblockquote}}
+
+%
+% Source Sans Pro as the default font family
+% Source Code Pro for monospace text
+%
+% 'default' option sets the default
+% font family to Source Sans Pro, not \sfdefault.
+%
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+    \usepackage[default]{sourcesanspro}
+  \usepackage{sourcecodepro}
+  \else % if not pdftex
+    \usepackage[default]{sourcesanspro}
+  \usepackage{sourcecodepro}
+
+  % XeLaTeX specific adjustments for straight quotes: https://tex.stackexchange.com/a/354887
+  % This issue is already fixed (see https://github.com/silkeh/latex-sourcecodepro/pull/5) but the
+  % fix is still unreleased.
+  % TODO: Remove this workaround when the new version of sourcecodepro is released on CTAN.
+  \ifxetex
+    \makeatletter
+    \defaultfontfeatures[\ttfamily]
+      { Numbers   = \sourcecodepro@figurestyle,
+        Scale     = \SourceCodePro@scale,
+        Extension = .otf }
+    \setmonofont
+      [ UprightFont    = *-\sourcecodepro@regstyle,
+        ItalicFont     = *-\sourcecodepro@regstyle It,
+        BoldFont       = *-\sourcecodepro@boldstyle,
+        BoldItalicFont = *-\sourcecodepro@boldstyle It ]
+      {SourceCodePro}
+    \makeatother
+  \fi
+  \fi
+
+%
+% heading color
+%
+\definecolor{heading-color}{RGB}{40,40,40}
+\addtokomafont{section}{\color{heading-color}}
+% When using the classes report, scrreprt, book,
+% scrbook or memoir, uncomment the following line.
+%\addtokomafont{chapter}{\color{heading-color}}
+
+%
+% variables for title, author and date
+%
+\usepackage{titling}
+\title{Konfiguracja Ubuntu Server 24.04}
+\author{Rafał Kiepiela}
+\date{}
+
+%
+% tables
+%
+
+%
+% remove paragraph indentation
+%
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+
+%
+%
+% Listings
+%
+%
+
+
+%
+% general listing colors
+%
+\definecolor{listing-background}{HTML}{F7F7F7}
+\definecolor{listing-rule}{HTML}{B3B2B3}
+\definecolor{listing-numbers}{HTML}{B3B2B3}
+\definecolor{listing-text-color}{HTML}{000000}
+\definecolor{listing-keyword}{HTML}{435489}
+\definecolor{listing-keyword-2}{HTML}{1284CA} % additional keywords
+\definecolor{listing-keyword-3}{HTML}{9137CB} % additional keywords
+\definecolor{listing-identifier}{HTML}{435489}
+\definecolor{listing-string}{HTML}{00999A}
+\definecolor{listing-comment}{HTML}{8E8E8E}
+
+\lstdefinestyle{eisvogel_listing_style}{
+  language         = java,
+  numbers          = left,
+  xleftmargin      = 2.7em,
+  framexleftmargin = 2.5em,
+  backgroundcolor  = \color{listing-background},
+  basicstyle       = \color{listing-text-color}\linespread{1.0}%
+                      \lst@ifdisplaystyle%
+                      \small%
+                      \fi\ttfamily{},
+  breaklines       = true,
+  frame            = single,
+  framesep         = 0.19em,
+  rulecolor        = \color{listing-rule},
+  frameround       = ffff,
+  tabsize          = 4,
+  numberstyle      = \color{listing-numbers},
+  aboveskip        = 1.0em,
+  belowskip        = 0.1em,
+  abovecaptionskip = 0em,
+  belowcaptionskip = 1.0em,
+  keywordstyle     = {\color{listing-keyword}\bfseries},
+  keywordstyle     = {[2]\color{listing-keyword-2}\bfseries},
+  keywordstyle     = {[3]\color{listing-keyword-3}\bfseries\itshape},
+  sensitive        = true,
+  identifierstyle  = \color{listing-identifier},
+  commentstyle     = \color{listing-comment},
+  stringstyle      = \color{listing-string},
+  showstringspaces = false,
+  escapeinside     = {/*@}{@*/}, % Allow LaTeX inside these special comments
+  literate         =
+  {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+  {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+  {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+  {À}{{\`A}}1 {È}{{\`E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+  {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+  {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+  {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+  {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+  {œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1
+  {ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
+  {€}{{\EUR}}1 {£}{{\pounds}}1 {«}{{\guillemotleft}}1
+  {»}{{\guillemotright}}1 {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {¿}{{?`}}1
+  {…}{{\ldots}}1 {≥}{{>=}}1 {≤}{{<=}}1 {„}{{\glqq}}1 {“}{{\grqq}}1
+  {”}{{''}}1
+}
+\lstset{style=eisvogel_listing_style}
+
+%
+% Java (Java SE 12, 2019-06-22)
+%
+\lstdefinelanguage{Java}{
+  morekeywords={
+    % normal keywords (without data types)
+    abstract,assert,break,case,catch,class,continue,default,
+    do,else,enum,exports,extends,final,finally,for,if,implements,
+    import,instanceof,interface,module,native,new,package,private,
+    protected,public,requires,return,static,strictfp,super,switch,
+    synchronized,this,throw,throws,transient,try,volatile,while,
+    % var is an identifier
+    var
+  },
+  morekeywords={[2] % data types
+    % primitive data types
+    boolean,byte,char,double,float,int,long,short,
+    % String
+    String,
+    % primitive wrapper types
+    Boolean,Byte,Character,Double,Float,Integer,Long,Short
+    % number types
+    Number,AtomicInteger,AtomicLong,BigDecimal,BigInteger,DoubleAccumulator,DoubleAdder,LongAccumulator,LongAdder,Short,
+    % other
+    Object,Void,void
+  },
+  morekeywords={[3] % literals
+    % reserved words for literal values
+    null,true,false,
+  },
+  sensitive,
+  morecomment  = [l]//,
+  morecomment  = [s]{/*}{*/},
+  morecomment  = [s]{/**}{*/},
+  morestring   = [b]",
+  morestring   = [b]',
+}
+
+\lstdefinelanguage{XML}{
+  morestring      = [b]",
+  moredelim       = [s][\bfseries\color{listing-keyword}]{<}{\ },
+  moredelim       = [s][\bfseries\color{listing-keyword}]{</}{>},
+  moredelim       = [l][\bfseries\color{listing-keyword}]{/>},
+  moredelim       = [l][\bfseries\color{listing-keyword}]{>},
+  morecomment     = [s]{<?}{?>},
+  morecomment     = [s]{<!--}{-->},
+  commentstyle    = \color{listing-comment},
+  stringstyle     = \color{listing-string},
+  identifierstyle = \color{listing-identifier}
+}
+
+%
+% header and footer
+%
+\usepackage[headsepline,footsepline]{scrlayer-scrpage}
+
+\newpairofpagestyles{eisvogel-header-footer}{
+  \clearpairofpagestyles
+  \ihead*{Konfiguracja Ubuntu Server 24.04}
+  \chead*{}
+  \ohead*{}
+  \ifoot*{Rafał Kiepiela}
+  \cfoot*{}
+  \ofoot*{\thepage}
+  \addtokomafont{pageheadfoot}{\upshape}
+}
+\pagestyle{eisvogel-header-footer}
+
+
+
+%
+% Define watermark
+%
+
+\begin{document}
+
+\begin{titlepage}
+\newgeometry{top=2cm, right=4cm, bottom=3cm, left=4cm}
+\tikz[remember picture,overlay] \node[inner sep=0pt] at (current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{background2.pdf}};
+\newcommand{\colorRule}[3][black]{\textcolor[HTML]{#1}{\rule{#2}{#3}}}
+\begin{flushleft}
+\noindent
+\\[-1em]
+\color[HTML]{5F5F5F}
+\makebox[0pt][l]{\colorRule[435488]{1.3\textwidth}{4pt}}
+\par
+\noindent
+
+% The titlepage with a background image has other text spacing and text size
+{
+  \setstretch{2}
+  \vfill
+  \vskip -8em
+  \noindent {\huge \textbf{\textsf{Konfiguracja Ubuntu Server 24.04}}}
+    \vskip 2em
+  \noindent {\Large \textsf{Rafał Kiepiela} \vskip 0.6em \textsf{}}
+  \noindent {\Large \textsf{github.com/TexturedPolak} \vskip 0.6em \textsf{}}
+  \vfill
+}
+
+
+\end{flushleft}
+\end{titlepage}
+\restoregeometry
+\pagenumbering{arabic}
+
+% don't generate the default title
+% \maketitle
+
+
+\section{Konfiguracja Ubuntu Server
+24.04}\label{konfiguracja-ubuntu-server-24.04}
+
+\subsection{0. Słowem Wstępu}\label{sux142owem-wstux119pu}
+
+Dokument ten przedstawia przykładową konfigurację Ubuntu Server 24.04.
+Konfigurowane usługi to:
+
+\begin{itemize}
+\tightlist
+\item
+  sieć (netplan)
+\item
+  serwer DHCP (isc-dhcp-server)
+\item
+  serwer DNS (bind9)
+\item
+  routing (iptables)
+\item
+  serwer plików FTP (vsftpd)
+\item
+  serwer plików Samba (samba)
+\item
+  serwer WWW (apache2)
+\item
+  serwer SSH (openssh-server)
+\item
+  serwer telnet (telnetd)
+\end{itemize}
+
+Autor zaznacza, że zrzuty ekrany były kadrowane tylko i wyłącznie dla
+czytelności dokumentu oraz, że jest świadomy, iż na egzaminie z
+kwalifikacji INF.02 nie można kadrować zrzutów ekranów.
+
+\subsection{1. Konfiguracja sieci}\label{konfiguracja-sieci}
+
+Przyjęte założenia:
+
+\begin{itemize}
+\tightlist
+\item
+  automatycznie przydzielany adres IP (DHCP) na pierwszej karcie
+  sieciowej
+\item
+  statyczny adres IP klasy B (w moim przypadku 172.16.0.1), maska
+  podsieci 16 bitowa na drugiej karcie sieciowej
+\end{itemize}
+
+\subsubsection{Krok 1 - Sprawdzenie stanu i nazw kart
+sieciowych}\label{krok-1---sprawdzenie-stanu-i-nazw-kart-sieciowych}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{ip}\NormalTok{ a}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/ip-a-przed.png}}
+
+Widzimy dwie karty sieciowe:
+
+\begin{itemize}
+\tightlist
+\item
+  enp0s3 - WAN (pierwsza karta sieciowa)
+\item
+  enp0s8 - LAN (druga karta sieciowa)
+\end{itemize}
+
+\subsubsection{Krok 2 - Edycja pliku konfiguracyjnego
+netplan'a}\label{krok-2---edycja-pliku-konfiguracyjnego-netplana}
+
+Nazwa pliku konfiguracyjnego może nieznacznie się różnić w zależności od
+edycji systemu, dlatego zastosowano znak ``*``:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ nano /etc/netplan/}\PreprocessorTok{*}\NormalTok{.yaml}
+\end{Highlighting}
+\end{Shaded}
+
+Edytujemy plik do pożądanego rezultatu:
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/nano-netplan.png}}
+
+Omówię teraz tą konfigurację:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{network}\KeywordTok{:}
+\AttributeTok{  }\FunctionTok{version}\KeywordTok{:}\AttributeTok{ }\DecValTok{2}
+\AttributeTok{  }\FunctionTok{ethernets}\KeywordTok{:}
+\CommentTok{    \# Pierwsza karta sieciowa}
+\AttributeTok{    }\FunctionTok{enp0s3}\KeywordTok{:}\AttributeTok{ }
+\CommentTok{      \# Automatyczne przydzielanie adresu}
+\AttributeTok{      }\FunctionTok{dhcp4}\KeywordTok{:}\AttributeTok{ }\CharTok{true}\AttributeTok{ }
+\CommentTok{    \# Druga karta sieciowa}
+\AttributeTok{    }\FunctionTok{enp0s8}\KeywordTok{:}
+\CommentTok{      \# Wyłączenie automatycznego przydzielania adresów}
+\AttributeTok{      }\FunctionTok{dhcp4}\KeywordTok{:}\AttributeTok{ }\CharTok{false}\AttributeTok{ }
+\CommentTok{      \# Ustawienie statycznego adresu IP (172.16.0.1, maska 16 bitowa)}
+\AttributeTok{      }\FunctionTok{addresses}\KeywordTok{:}\AttributeTok{ }\KeywordTok{[}\AttributeTok{172.16.0.1/}\DecValTok{16}\KeywordTok{]}
+\CommentTok{      \# Ustawianie adresów serwerów DNS}
+\AttributeTok{      }\FunctionTok{nameservers}\KeywordTok{:}\AttributeTok{ }
+\CommentTok{        \# Adresy serwerów DNS}
+\AttributeTok{        }\FunctionTok{addresses}\KeywordTok{:}\AttributeTok{ }\KeywordTok{[}\FloatTok{172.16.0.1}\KeywordTok{,}\AttributeTok{ }\FloatTok{1.1.1.1}\KeywordTok{]}\AttributeTok{ }
+\end{Highlighting}
+\end{Shaded}
+
+Należy zwrócić uwagę na zachowanie wcięć.
+
+\subsubsection{Krok 3 - Zastosowanie konfiguracji oraz sprawdzenie
+poprawności wykonanej
+konfiguracji}\label{krok-3---zastosowanie-konfiguracji-oraz-sprawdzenie-poprawnoux15bci-wykonanej-konfiguracji}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ netplan apply}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{ip}\NormalTok{ a}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/netplan-apply.png}}
+
+Żaden błąd nie wyskoczył, a konfiguracja sieci wygląda poprawnie.
+
+\subsection{2. Konfiguracja serwera
+DHCP}\label{konfiguracja-serwera-dhcp}
+
+\subsubsection{Krok 0 - Instalacja pakietu
+isc-dhcp-server}\label{krok-0---instalacja-pakietu-isc-dhcp-server}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt update}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt install isc{-}dhcp{-}server}
+\end{Highlighting}
+\end{Shaded}
+
+Ja już ten pakiet zainstalowałem szybciej, przejdźmy do konfiguracji.
+
+\subsubsection{Krok 1 - Edycja pliku konfiguracyjnego
+isc-dhcp-server}\label{krok-1---edycja-pliku-konfiguracyjnego-isc-dhcp-server}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ nano /etc/default/isc{-}dhcp{-}server}
+\end{Highlighting}
+\end{Shaded}
+
+Edytujemy plik do pożądanego rezultatu:
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/nano-isc-dhcp-server.png}}
+
+Omówienie konfiguracji:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# (...) Komentarze (...)}
+
+\CommentTok{\# Podajemy nazwę karty sieciowej LAN\textquotesingle{}owej }
+\CommentTok{\# (w moim przypadku enp0s8)}
+\DataTypeTok{INTERFACESv4}\OperatorTok{=}\StringTok{"enp0s8"}
+\CommentTok{\# Zostawiamy puste }
+\DataTypeTok{INTERFACESv6}\OperatorTok{=}\StringTok{""}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Krok 2 - Edycja pliku konfiguracyjnego
+dhcpd.conf}\label{krok-2---edycja-pliku-konfiguracyjnego-dhcpd.conf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ nano /etc/dhcp/dhcpd.conf}
+\end{Highlighting}
+\end{Shaded}
+
+Edytujemy plik do pożądanego rezultatu:
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/nano-dhcpd2.png}}
+
+Omówienie konfiguracji:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# (...) Komentarze i inne domyślne ustawienia (...)}
+
+\CommentTok{\# Ustawienie serwera DHCP jako jedyny w sieci}
+\ExtensionTok{authoritative}\KeywordTok{;}
+
+\CommentTok{\# (...) Komentarze (...)}
+
+\CommentTok{\# subnet {-} adres sieci {-} netmask {-} maska podsieci}
+\ExtensionTok{subnet}\NormalTok{ 172.16.0.0 netmask 255.255.0.0 \{}
+  \CommentTok{\# Zakres sieci (bez serwera)}
+  \CommentTok{\# W moim przypadku 172.16.0.10{-}172.16.0.20}
+  \ExtensionTok{range}\NormalTok{ 172.16.0.10 172.16.0.20}\KeywordTok{;}
+  \CommentTok{\# Adresy serwerów DNS}
+  \ExtensionTok{option}\NormalTok{ domain{-}name{-}servers 172.16.0.1, 1.1.1.1}\KeywordTok{;}
+  \CommentTok{\# Nazwa domeny (opcjonalnie)}
+  \ExtensionTok{option}\NormalTok{ domain{-}name }\StringTok{"kiepiela.local"}\KeywordTok{;}
+  \CommentTok{\# Maska podsieci}
+  \ExtensionTok{option}\NormalTok{ subnet{-}mask 255.255.0.0}\KeywordTok{;}
+  \CommentTok{\# Adres rozgłoszeniowy}
+  \ExtensionTok{option}\NormalTok{ broadcast{-}address 172.16.255.255}\KeywordTok{;}
+  \CommentTok{\# Czas zalokowania adresu}
+  \ExtensionTok{default{-}lease{-}time}\NormalTok{ 600}\KeywordTok{;}
+  \CommentTok{\# Maksymalny czas zalokowania adresu}
+  \ExtensionTok{max{-}lease{-}time}\NormalTok{ 7200}\KeywordTok{;}
+\ErrorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Krok 3 - Zastosowanie konfiguracji oraz sprawdzenie
+poprawności wykonanej
+konfiguracji}\label{krok-3---zastosowanie-konfiguracji-oraz-sprawdzenie-poprawnoux15bci-wykonanej-konfiguracji-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ systemctl restart isc{-}dhcp{-}server}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ systemctl status isc{-}dhcp{-}server}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/systemctl-dhcp.png}}
+
+Jest na zielono? - to oznacza, że wszystko działa :)
+
+\subsection{3. Konfiguracja serwera DNS}\label{konfiguracja-serwera-dns}
+
+\subsubsection{Krok 0 - Instalacja pakietu bind9 i
+bind9-utils}\label{krok-0---instalacja-pakietu-bind9-i-bind9-utils}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt update}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt install bind9 bind9{-}utils}
+\end{Highlighting}
+\end{Shaded}
+
+Ja już te pakiety zainstalowałem szybciej, przejdźmy do konfiguracji.
+
+\subsubsection{Krok 1 - Edycja pliku konfiguracyjnego
+named.conf.options}\label{krok-1---edycja-pliku-konfiguracyjnego-named.conf.options}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ nano /etc/bind/named.conf.options}
+\end{Highlighting}
+\end{Shaded}
+
+Edytujemy plik do pożądanego rezultatu:
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/nano-named-conf-options.png}}
+
+Omówienie konfiguracji:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{options }\OperatorTok{\{}
+  \CommentTok{// Wartość domyślna}
+\NormalTok{  directory }\StringTok{"/var/cache/bind"}\OperatorTok{;}
+
+  \CommentTok{// (...) Komendarze (...)}
+
+\NormalTok{  forwarders }\OperatorTok{\{}
+    \CommentTok{// Adresy publicznych serwerów DNS}
+    \FloatTok{1.1.1.1}\OperatorTok{;}
+    \FloatTok{8.8.8.8}\OperatorTok{;}
+  \OperatorTok{\}}
+
+  \CommentTok{// (...) Komentarze (...)}
+
+  \CommentTok{// Wartości domyślne}
+\NormalTok{  dnssec}\OperatorTok{{-}}\NormalTok{validation auto}\OperatorTok{;}
+\NormalTok{  listen}\OperatorTok{{-}}\NormalTok{on}\OperatorTok{{-}}\NormalTok{v6 }\OperatorTok{\{}\NormalTok{any}\OperatorTok{;} \OperatorTok{\};}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Krok 2 - Edycja pliku konfiguracyjnego
+named.conf.local}\label{krok-2---edycja-pliku-konfiguracyjnego-named.conf.local}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ nano /etc/bind/named.conf.local}
+\end{Highlighting}
+\end{Shaded}
+
+Edytujemy plik do pożądanego rezultatu:
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/nano-named-conf-local2.png}}
+
+Omówienie konfiguracji:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{// (...) Komentarze (...)}
+
+\CommentTok{// Domena (strefa do przodu)}
+\NormalTok{zone }\StringTok{"kiepiela.local"}\OperatorTok{\{}
+\NormalTok{  type master}\OperatorTok{;}
+\NormalTok{  file }\StringTok{"/etc/bind/strefaprzod"}\OperatorTok{;}
+\OperatorTok{\};}
+\CommentTok{// Adres sieci bez zer od tyłu + ".in{-}addr.arpa" (strefa do tyłu)}
+\NormalTok{zone }\StringTok{"16.172.in{-}addr.arpa"}\OperatorTok{\{}
+\NormalTok{  type master}\OperatorTok{;}
+\NormalTok{  file }\StringTok{"/etc/bind/strefatyl"}\OperatorTok{;}
+\OperatorTok{\};}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Krok 3 - Utworzenie i edycja pliku konfiguracyjnego
+strefaprzod}\label{krok-3---utworzenie-i-edycja-pliku-konfiguracyjnego-strefaprzod}
+
+Kopiowanie domyślnego pliku konfiguracyjnego do naszego:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ cp /etc/bind/db.local /etc/bind/strefaprzod}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ nano /etc/bind/strefaprzod}
+\end{Highlighting}
+\end{Shaded}
+
+Edytujemy plik do pożądanego rezultatu:
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/nano-strefaprzod2.png}}
+
+Omówienie konfiguracji:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{; (...) komentarze (...)}
+
+\NormalTok{$TTL  }\DecValTok{604800}\CommentTok{;     użytkownik.domena.    root.użytkownik.domena.}
+\NormalTok{@     IN  SOA     rafal.kiepiela.local. root.rafal.kiepiela.local.(}
+                        \DecValTok{2}         \CommentTok{; Serial}
+                   \DecValTok{604800}         \CommentTok{; Refresh}
+                    \DecValTok{86400}         \CommentTok{; Retry}
+                  \DecValTok{2419200}         \CommentTok{; Expire}
+                   \DecValTok{604800}\NormalTok{ )       }\CommentTok{; Negative Cache TTL}
+\CommentTok{;}
+\CommentTok{;                 użytkownik.domena.}
+\NormalTok{@     IN  NS      rafal.kiepiela.local.}
+\CommentTok{;                 adres ip serwera}
+\NormalTok{@     IN  A       }\DecValTok{172}\NormalTok{.}\DecValTok{16}\NormalTok{.}\FloatTok{0.1}
+\CommentTok{;@     IN  AAAA    ::1}
+\CommentTok{; użytkownik      adres ip serwera}
+\NormalTok{rafal IN  A       }\DecValTok{172}\NormalTok{.}\DecValTok{16}\NormalTok{.}\FloatTok{0.1}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Krok 4 - Utworzenie i edycja pliku konfiguracyjnego
+strefatyl}\label{krok-4---utworzenie-i-edycja-pliku-konfiguracyjnego-strefatyl}
+
+Kopiowanie pliku konfiguracyjnego strefaprzod do strefatyl:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ cp /etc/bind/strefaprzod /etc/bind/strefatyl}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ nano /etc/bind/strefatyl}
+\end{Highlighting}
+\end{Shaded}
+
+Edytujemy plik do pożądanego rezultatu:
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/nano-strefatyl2.png}}
+
+Omówienie konfiguracji:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{; (...) komentarze (...)}
+
+\NormalTok{$TTL  }\DecValTok{604800}\CommentTok{;     użytkownik.domena.    root.użytkownik.domena.}
+\NormalTok{@     IN  SOA     rafal.kiepiela.local. root.rafal.kiepiela.local.(}
+                        \DecValTok{2}         \CommentTok{; Serial}
+                   \DecValTok{604800}         \CommentTok{; Refresh}
+                    \DecValTok{86400}         \CommentTok{; Retry}
+                  \DecValTok{2419200}         \CommentTok{; Expire}
+                   \DecValTok{604800}\NormalTok{ )       }\CommentTok{; Negative Cache TTL}
+\CommentTok{;}
+\CommentTok{;                 użytkownik.domena.}
+\NormalTok{@     IN  NS      rafal.kiepiela.local.}
+\CommentTok{;                 adres ip serwera}
+\NormalTok{@     IN  A       }\DecValTok{172}\NormalTok{.}\DecValTok{16}\NormalTok{.}\FloatTok{0.1}
+\CommentTok{;@     IN  AAAA    ::1}
+\CommentTok{; użytkownik      adres ip serwera}
+\NormalTok{rafal IN  A       }\DecValTok{172}\NormalTok{.}\DecValTok{16}\NormalTok{.}\FloatTok{0.1}
+
+\CommentTok{; nowości od tego momentu:}
+\CommentTok{; adres serwera od tyłu bez części sieciowej | użytkownik.domena.}
+\FloatTok{1.0}\NormalTok{   IN  PTR     rafal.kiepiela.local.}
+\CommentTok{;                 domena.}
+\NormalTok{@     IN  PTR     kiepiela.local.}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Krok 5 - Zastosowanie konfiguracji oraz sprawdzenie
+poprawności wykonanej
+konfiguracji}\label{krok-5---zastosowanie-konfiguracji-oraz-sprawdzenie-poprawnoux15bci-wykonanej-konfiguracji}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ systemctl restart bind9}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ systemctl status bind9}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/systemctl-bind.png}}
+
+Jest na zielono? - to oznacza, że wszystko działa :)
+
+\subsubsection{Krok 6 - Edycja pliku konfiguracyjnego
+resolv.conf}\label{krok-6---edycja-pliku-konfiguracyjnego-resolv.conf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ nano /etc/resolv.conf}
+\end{Highlighting}
+\end{Shaded}
+
+Edytujemy plik do pożądanego rezultatu:
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/nano-resolv.png}}
+
+Omówienie konfiguracji:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# (...) Komentarze (...)}
+
+\CommentTok{\# Adres serwera {-} na serwerze można ustawić localhost}
+\ExtensionTok{nameserver}\NormalTok{ 127.0.0.1}
+\CommentTok{\# Domena}
+\ExtensionTok{search}\NormalTok{ kiepiela.local}
+\end{Highlighting}
+\end{Shaded}
+
+Warto też zabezpieczyć plik przed nadpisywaniem przez system podczas
+restartu:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{realpath}\NormalTok{ /etc/resolv.conf}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ chattr +i /run/systemd/resolve/stub{-}resolv.conf}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/chattr-resolv.png}}
+
+Aktualizacja systemu jednak może powodować ``zdjęcie'' tej ``ochrony''.
+
+\subsubsection{Krok 7 - Zastosowanie konfiguracji oraz sprawdzenie
+poprawności wykonanej konfiguracji
+(nslookup)}\label{krok-7---zastosowanie-konfiguracji-oraz-sprawdzenie-poprawnoux15bci-wykonanej-konfiguracji-nslookup}
+
+Warto sprawdzić~czy wszystko działa narzędziem nslookup:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{nslookup}\NormalTok{ kiepiela.local}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{nslookup}\NormalTok{ rafal.kiepiela.local}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{nslookup}\NormalTok{ wp.pl}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{nslookup}\NormalTok{ 172.16.0.1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{nslookup}\NormalTok{ rafal}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/nslookup3.png}}
+
+Jak widać strefa do przodu jak i do tył zwraca pożądany wynik.
+
+\subsubsection{Krok 8 (w razie problemów) - Edycja pliku
+konfiguracyjnego
+hosts}\label{krok-8-w-razie-problemuxf3w---edycja-pliku-konfiguracyjnego-hosts}
+
+Plik /etc/hosts omija serwery DNS (tak nawet nasz, który
+konfigurowaliśmy) i wymusza swoje własne wartości. Takie trochę
+rozwiązanie ``na chama''.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ nano /etc/hosts}
+\end{Highlighting}
+\end{Shaded}
+
+Edytujemy plik do pożądanego rezultatu:
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/nano-hosts.png}}
+
+Omówienie konfiguracji:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{127.0.0.1}\NormalTok{ localhost}
+\ExtensionTok{127.0.1.1}\NormalTok{ kiepiela}
+\CommentTok{\# adres serwera | użytkownik}
+\ExtensionTok{172.16.0.1}\NormalTok{ rafal}
+
+\CommentTok{\# (...) domyślne ustawienia (...)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{4. Konfiguracja routingu
+(NAT)}\label{konfiguracja-routingu-nat}
+
+\subsubsection{Krok 1 - włączenie routingu w systemie (plik
+sysctl.conf)}\label{krok-1---wux142ux105czenie-routingu-w-systemie-plik-sysctl.conf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ nano /etc/sysctl.conf}
+\end{Highlighting}
+\end{Shaded}
+
+Edytujemy plik do pożądanego rezultatu:
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/nano-sysctl.png}}
+
+Omówienie konfiguracji:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Należy odkomentować linijkę poniżej:}
+\ExtensionTok{net.ipv4.ip\_forward=1}
+\end{Highlighting}
+\end{Shaded}
+
+Zastosowanie konfiguracji:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ sysctl }\AttributeTok{{-}p}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/sysctl.png}}
+
+\subsubsection{Krok 2 - Konfiguracja maskarady w
+firewall'u}\label{krok-2---konfiguracja-maskarady-w-firewallu}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+                                  \CommentTok{\# nazwa karty WAN}
+\FunctionTok{sudo}\NormalTok{ iptables }\AttributeTok{{-}t}\NormalTok{ nat }\AttributeTok{{-}A}\NormalTok{ POSTROUTING }\AttributeTok{{-}o}\NormalTok{ enp0s3 }\AttributeTok{{-}j}\NormalTok{ MASQUERADE}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/iptables.png}}
+
+\subsubsection{Krok 3 - Zachowanie routingu po
+restarcie}\label{krok-3---zachowanie-routingu-po-restarcie}
+
+Aby zachować ustawienia routingu po restarcie należy zainstalować pakiet
+iptables-persistent.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt update}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt install iptables{-}persistent}
+\end{Highlighting}
+\end{Shaded}
+
+Podczas instalacji wyskoczą 2 monity. Należy wybrać ``yes''.
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/iptables-monit-v4.png}}
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/iptables-monit-v6.png}}
+
+Konfigurację warto jeszcze raz ręczenie zapisać:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ iptables{-}save}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/iptables-save.png}}
+
+\subsection{5. Serwer plików FTP}\label{serwer-plikuxf3w-ftp}
+
+\subsubsection{Krok 0 - Instalacja pakietu
+vsftpd}\label{krok-0---instalacja-pakietu-vsftpd}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt update}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt install vsftpd}
+\end{Highlighting}
+\end{Shaded}
+
+Ja już ten pakiet zainstalowałem szybciej, przejdźmy do konfiguracji.
+
+\subsubsection{Krok 1 - Edycja pliku konfiguracyjnego
+vsftpd.conf}\label{krok-1---edycja-pliku-konfiguracyjnego-vsftpd.conf}
+
+Na potrzeby ćwiczeniowe przyjmujemy, że użytkownik anonimowy będzie miał
+dostęp do zapisu jak i odczytu.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ nano /etc/vsftpd.conf}
+\end{Highlighting}
+\end{Shaded}
+
+Edytujemy plik do pożądanego rezultatu:
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/vsftpd.png}}
+
+Omówienie konfiguracji:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Włączenie serwera}
+\VariableTok{listen}\OperatorTok{=}\NormalTok{YES}
+\CommentTok{\# Wyłaczenie nagłaśniania na ipv6 (musi być NO inaczej powoduje problemy)}
+\VariableTok{listen\_ipv6}\OperatorTok{=}\NormalTok{NO}
+\CommentTok{\# Włączenie dostępu anonimowego}
+\VariableTok{anonymous\_enable}\OperatorTok{=}\NormalTok{YES}
+\CommentTok{\# Włączenie logowania bez hasła}
+\VariableTok{no\_anon\_password}\OperatorTok{=}\NormalTok{YES}
+\CommentTok{\# Włączenie zapisu}
+\VariableTok{write\_enable}\OperatorTok{=}\NormalTok{YES}
+\CommentTok{\# Coś z uprawnieniami}
+\VariableTok{local\_umask}\OperatorTok{=}\NormalTok{022}
+\VariableTok{anon\_umask}\OperatorTok{=}\NormalTok{022}
+\CommentTok{\# Włączenie zapisu dla anonimów}
+\VariableTok{anon\_upload\_enable}\OperatorTok{=}\NormalTok{YES}
+\CommentTok{\# Włączenie tworzenia folderów dla anonimów}
+\VariableTok{anon\_mkdir\_write\_enable}\OperatorTok{=}\NormalTok{YES}
+\CommentTok{\# Włączenie innych uprawnień dla anonimów}
+\VariableTok{anon\_other\_write\_enable}\OperatorTok{=}\NormalTok{YES}
+\CommentTok{\# Ścieżka do folderu (zaraz go utworzymy)}
+\VariableTok{anon\_root}\OperatorTok{=}\NormalTok{/srv/anon}
+
+\CommentTok{\# (...) Reszta domyślnie (...)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Krok 2 - Utworzenie odpowiednich folderów i ustawienie
+odpowiednich
+uprawnień}\label{krok-2---utworzenie-odpowiednich-folderuxf3w-i-ustawienie-odpowiednich-uprawnieux144}
+
+Tworzymy dwa foldery:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ mkdir /srv/anon}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ mkdir /srv/anon/folder{-}do{-}zapisu}
+\end{Highlighting}
+\end{Shaded}
+
+I ustawiamy odpowiednie uprawnienia:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ chmod 755 /srv/anon }\CommentTok{\# Tak, ten folder ma mieć uprawnienia zapisu tylko dla właściciela}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ chmod 777 /srv/anon/folder{-}do{-}zapisu}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/vsftpd-folders.png}}
+
+\subsubsection{Krok 3 - Zastosowanie konfiguracji oraz sprawdzenie
+poprawności wykonanej
+konfiguracji}\label{krok-3---zastosowanie-konfiguracji-oraz-sprawdzenie-poprawnoux15bci-wykonanej-konfiguracji-2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ systemctl restart vsftpd}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ systemctl status vsftpd}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/systemctl-vsftpd.png}}
+
+Jest na zielono? - to oznacza, że wszystko działa :)
+
+\subsection{6. Serwer plików Samba}\label{serwer-plikuxf3w-samba}
+
+\subsubsection{Krok 0 - Instalacja pakietu
+samba}\label{krok-0---instalacja-pakietu-samba}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt update}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt install samba}
+\end{Highlighting}
+\end{Shaded}
+
+Ja już ten pakiet zainstalowałem szybciej, przejdźmy do konfiguracji.
+
+\subsubsection{Krok 1 - Edycja pliku konfiguracyjnego
+smb.conf}\label{krok-1---edycja-pliku-konfiguracyjnego-smb.conf}
+
+Na potrzeby ćwiczeniowe przyjmujemy, że użytkownik anonimowy będzie miał
+dostęp do zapisu jak i odczytu.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ nano /etc/samba/smb.conf}
+\end{Highlighting}
+\end{Shaded}
+
+Edytujemy plik do pożądanego rezultatu:
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/nano-smb.png}}
+
+Omówienie konfiguracji:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# (...) Domyślne ustawienia i kometarze (...)}
+
+\KeywordTok{[anon]}
+\DataTypeTok{  }\CommentTok{\# Ścieżka do folderu który zaraz utworzymy}
+\DataTypeTok{  path }\OtherTok{=}\StringTok{ /srv/samba}
+\DataTypeTok{  }\CommentTok{\# Dostęp anonimowy}
+\DataTypeTok{  guest ok }\OtherTok{=}\StringTok{ }\KeywordTok{yes}
+\DataTypeTok{  }\CommentTok{\# Przeglądanie zawartości}
+\DataTypeTok{  browseable }\OtherTok{=}\StringTok{ }\KeywordTok{yes}
+\DataTypeTok{  }\CommentTok{\# Włączenie zapisu}
+\DataTypeTok{  read only }\OtherTok{=}\StringTok{ }\KeywordTok{no}
+\DataTypeTok{  writeable }\OtherTok{=}\StringTok{ }\KeywordTok{yes}
+\DataTypeTok{  }\CommentTok{\# Czy widoczny na liście}
+\DataTypeTok{  public }\OtherTok{=}\StringTok{ }\KeywordTok{yes}\StringTok{ }
+\DataTypeTok{  }\CommentTok{\# Coś z uprawnieniami}
+\DataTypeTok{  create mask }\OtherTok{=}\StringTok{ }\DecValTok{0666}
+\DataTypeTok{  directory mask }\OtherTok{=}\StringTok{ }\DecValTok{0777}
+\DataTypeTok{  }\CommentTok{\# Wymuszenie danego użytkownika do obsługi serwera }
+\DataTypeTok{  }\CommentTok{\# (NIE STOSOWAĆ ROOT\textquotesingle{}a NA PRODUKCJI!)}
+\DataTypeTok{  force user }\OtherTok{=}\StringTok{ root}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Krok 2 - Utworzenie odpowiednich folderów i ustawienie
+odpowiednich
+uprawnień}\label{krok-2---utworzenie-odpowiednich-folderuxf3w-i-ustawienie-odpowiednich-uprawnieux144-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ mkdir /srv/samba}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ chmod 777 /srv/samba}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/mkdir-samba.png}}
+
+\subsubsection{Krok 3 - Zastosowanie konfiguracji oraz sprawdzenie
+poprawności wykonanej
+konfiguracji}\label{krok-3---zastosowanie-konfiguracji-oraz-sprawdzenie-poprawnoux15bci-wykonanej-konfiguracji-3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ systemctl restart smbd}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ systemctl status smbd}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/systemctl-smbd.png}}
+
+Jest na zielono? - to oznacza, że wszystko działa :)
+
+\subsection{7. Konfiguracja serwera WWW}\label{konfiguracja-serwera-www}
+
+\subsubsection{Krok 0.0 - Instalacja pakietu
+apache2}\label{krok-0.0---instalacja-pakietu-apache2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt update}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt install apache2}
+\end{Highlighting}
+\end{Shaded}
+
+Ja już ten pakiet zainstalowałem szybciej, przejdźmy do konfiguracji.
+
+\subsubsection{Krok 0.1 - Założenia}\label{krok-0.1---zaux142oux17cenia}
+
+Scenariusz zakłada, że strona internetowa (plik inny.html jako strona
+główna) znajduje się w folderze /srv/www a katalog ma uprawnienie
+odczytu dla serwera www (najlepiej 755). Uprawnienia można zmienić w ten
+sposób:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ chmod 755 /srv/www}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Krok 1 - Konfiguracja pliku konfiguracyjnego
+000-default.conf}\label{krok-1---konfiguracja-pliku-konfiguracyjnego-000-default.conf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ nano /etc/apache2/sites{-}available/000{-}default.conf}
+\end{Highlighting}
+\end{Shaded}
+
+Edytujemy plik do pożądanego rezultatu:
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/sites.png}}
+
+Omówienie konfiguracji:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{\textless{}}\NormalTok{VirtualHost }\ExtensionTok{*:80}\OperatorTok{\textgreater{}}
+
+   \CommentTok{\# (...) Kometarze (...)}
+
+  \ExtensionTok{ServerAdmin}\NormalTok{ webmaster@localhost }\CommentTok{\# Adres e{-}mail admina (do celów ćwiczeniowych można zostawić to co jest)}
+  \ExtensionTok{DocumentRoot}\NormalTok{ /srv/www }\CommentTok{\# ścieżka do folderu ze stroną}
+
+  \CommentTok{\# (...) Kometarze i inne domyślne ustawienia (...)}
+
+  \ExtensionTok{DirectoryIndex}\NormalTok{ inny.html }\CommentTok{\# ustawienie strony głównej na inny.html zamiast domyślnego index.html}
+\OperatorTok{\textless{}}\NormalTok{/VirtualHost}\OperatorTok{\textgreater{}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Krok 2 - Konfiguracja pliku konfiguracyjnego
+apache2.conf}\label{krok-2---konfiguracja-pliku-konfiguracyjnego-apache2.conf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ nano /etc/apache2/apache2.conf}
+\end{Highlighting}
+\end{Shaded}
+
+Edytujemy plik do pożądanego rezultatu:
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/apache2-conf.png}}
+
+Omówienie konfiguracji:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# (...) Komentarze i inne domyślne ustawienia (...)}
+
+\CommentTok{\#       ścieżka do folderu ze stroną}
+\OperatorTok{\textless{}}\NormalTok{Directory }\ExtensionTok{/srv/www/}\OperatorTok{\textgreater{}}
+    \CommentTok{\# 3 ustawienia domyślne:}
+    \ExtensionTok{Options}\NormalTok{ Indexes FollowSymLinks}
+    \ExtensionTok{AllowOverride}\NormalTok{ None}
+    \ExtensionTok{Require}\NormalTok{ all granted}
+\OperatorTok{\textless{}}\NormalTok{/Directory}\OperatorTok{\textgreater{}}
+
+\CommentTok{\# (...) Komentarze i inne domyślne ustawienia (...)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Krok 3 - Zastosowanie konfiguracji oraz sprawdzenie
+poprawności wykonanej
+konfiguracji}\label{krok-3---zastosowanie-konfiguracji-oraz-sprawdzenie-poprawnoux15bci-wykonanej-konfiguracji-4}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ systemctl restart apache2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ systemctl status apache2}
+\end{Highlighting}
+\end{Shaded}
+
+Dodatkowo możemy sprawdzić czy strona dotarła by po wpisaniu adresu w
+przeglądarce za pomocą narzędzia curl:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{curl}\NormalTok{ localhost}
+\end{Highlighting}
+\end{Shaded}
+
+Polecenie powinno zwrócić kod html naszej strony, w tym przypadku pliku
+inny.html
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/curl.png}}
+
+Jest na zielono? Curl wyświetla kod strony? - to oznacza, że wszystko
+działa :)
+
+\subsection{8. Konfiguracja serwera SSH}\label{konfiguracja-serwera-ssh}
+
+\subsubsection{Krok 0 - Instalacja pakietu
+openssh-server}\label{krok-0---instalacja-pakietu-openssh-server}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt update}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt install openssh{-}server}
+\end{Highlighting}
+\end{Shaded}
+
+Ja już ten pakiet zainstalowałem szybciej, przejdźmy do konfiguracji.
+
+\subsubsection{Krok 1 - Uruchomienie usługi
+SSH}\label{krok-1---uruchomienie-usux142ugi-ssh}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ systemctl enable ssh }\AttributeTok{{-}{-}now}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ systemctl status ssh}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/ssh.png}}
+
+Jest na zielono? - to oznacza, że wszystko działa :)
+
+\subsection{9. Konfiguracja serwera Telnet (używać SSH, chyba, że
+precyzowano, iż~należy
+używać~Telneta)}\label{konfiguracja-serwera-telnet-uux17cywaux107-ssh-chyba-ux17ce-precyzowano-iux17c-naleux17cy-uux17cywaux107-telneta}
+
+\subsubsection{Krok 0 - Instalacja pakietu
+telnetd}\label{krok-0---instalacja-pakietu-telnetd}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt update}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt install telnetd}
+\end{Highlighting}
+\end{Shaded}
+
+Ja już ten pakiet zainstalowałem szybciej, przejdźmy do konfiguracji.
+
+\subsubsection{Krok 1 - Edycja pliku konfiguracyjnego
+inetd.conf}\label{krok-1---edycja-pliku-konfiguracyjnego-inetd.conf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ nano /etc/inetd.conf}
+\end{Highlighting}
+\end{Shaded}
+
+Edytujemy plik do pożądanego rezultatu:
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/nano-inetd.png}}
+
+Omówienie konfiguracji:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Należy odkomentować linijkę:}
+\ExtensionTok{telnet}\NormalTok{  stream  tcp   nowait  root    /usr/sbin/tcpd  /usr/sbin/telnetd}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Krok 3 - Zastosowanie konfiguracji oraz sprawdzenie
+poprawności wykonanej
+konfiguracji}\label{krok-3---zastosowanie-konfiguracji-oraz-sprawdzenie-poprawnoux15bci-wykonanej-konfiguracji-5}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ systemctl restart inetd}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ systemctl status inetd}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/systemctl-inetd.png}}
+
+Jest na zielono? - to oznacza, że wszystko działa :)
+
+\subsection{Bonus - Aktualizacja
+systemu}\label{bonus---aktualizacja-systemu}
+
+\subsubsection{Krok 0 - Aktualizacja
+repozytoriów}\label{krok-0---aktualizacja-repozytoriuxf3w}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt update}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/apt-update.png}}
+
+\subsubsection{Krok 1 - Aktualizacja
+systemu}\label{krok-1---aktualizacja-systemu}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt upgrade}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/apt-upgrade.png}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{reboot}
+\end{Highlighting}
+\end{Shaded}
+
+lub
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ reboot}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Bonus - Aktualizacja Ubuntu Server do nowszej
+wersji}\label{bonus---aktualizacja-ubuntu-server-do-nowszej-wersji}
+
+\subsubsection{Krok 0 - Aktualizacja
+repozytoriów}\label{krok-0---aktualizacja-repozytoriuxf3w-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt update}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{/run/media/rafal/ECD5-E984/photos/apt-update.png}}
+
+\subsubsection{Krok 1 - Aktualizacja Ubuntu Server do nowszej
+wersji}\label{krok-1---aktualizacja-ubuntu-server-do-nowszej-wersji}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt dist{-}upgrade}
+\end{Highlighting}
+\end{Shaded}
+
+
+\end{document}
