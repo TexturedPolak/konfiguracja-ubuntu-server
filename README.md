@@ -10,4 +10,4 @@ Narzędzia znikneły? użyj xelatex'a i pliku .tex
 ```sh
 xelatex ubuntu\ server\ 24.04.tex
 ```
-## PDF dostępny w [releases](https://github.com/TexturedPolak/konfiguracja-ubuntu-server/releases)
+## PDF dostępny w [releases](https://github.com/TexturedPolak/konfiguracja-ubuntu-server/releases) ;)
